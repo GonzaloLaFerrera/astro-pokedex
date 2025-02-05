@@ -1,0 +1,69 @@
+---
+import type { GetStaticPaths } from "astro";
+
+import type { PokemonListResponse } from "../../interfaces/pokemon-list.response";
+
+import Layout from "../../layouts/Layout.astro";
+import PokemonCard from "../../components/pokemons/PokemonCard.astro";
+
+// función getStaticPaths sirve para definir las rutas que van a funcionar. Si no estan definidas acá dan 404!
+export const getStaticPaths = (async() => {
+    
+    const resp = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151")
+    const { results } = await resp.json() as PokemonListResponse;
+
+    // console.log(results)
+
+    // Manual
+    /* return [
+        { 
+            params: { name: 'bulbasaur' },
+            props: { name: 'bulbasaur', url:"https://pokeapi.co/api/v2/pokemon/1/"}
+        },  
+        { 
+            params: { name: 'charmander' },
+            props: { name: 'charmander', url:"https://pokeapi.co/api/v2/pokemon/4/"}
+        },
+    ]; */
+
+    // Estático, pero generado en base a la db de forma automática
+    return results.map(result => (
+            {
+                params: { name: result.name },
+                props: { url: result.url, name: result.name }
+            }
+        ))
+    
+}) 
+
+const { name } = Astro.params;
+const { url } = Astro.props;
+
+const id = url.split('/').at(-2);
+const audioSrc = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${id}.ogg`
+const pokemonImg = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`
+---
+
+<Layout title={`Pokémon - #${id} ${name}`} description={`Información sobre el Pokémon ${name}`} image={pokemonImg}>
+    <section class="mt-10 mx-10 flex flex-col justify-center items-center">
+
+        <div>
+            <a class="text-blue-500" href="/pokemons/1">Regresar</a>
+            <h1 class="text-3xl uppercase">{name}</h1>
+            <PokemonCard name={name} url={url} isBig />
+            <audio controls class="mt-5">
+                <source src={audioSrc} type="audio/ogg" />
+                <!-- mensaje en caso de que el navegador no soporte ese tag -->
+                Your browser does not support audio content.
+            </audio>
+        </div>
+
+    </section>
+</Layout>
+
+<!-- se pueden poner los estilos acá (scoped) o inline como siempre -->
+<style>
+    a {
+        @apply hover:underline 
+    }
+</style>

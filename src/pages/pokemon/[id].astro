@@ -1,0 +1,63 @@
+---
+import type { GetStaticPaths } from "astro";
+
+import type { PokemonListResponse } from "../../interfaces/pokemon-list.response";
+
+import Layout from "../../layouts/Layout.astro";
+
+// Path Relativo
+// import PokemonCard from "../../components/pokemons/PokemonCard.astro";
+
+// Path Absoluto
+// import PokemonCard from "src/components/pokemons/PokemonCard.astro";
+
+// Path Alias
+import PokemonCard from "@components/pokemons/PokemonCard.astro";
+
+// función getStaticPaths sirve para definir las rutas que van a funcionar. Si no estan definidas acá dan 404!
+export const getStaticPaths = (async() => {
+    
+    const resp = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151")
+    const { results } = await resp.json() as PokemonListResponse;
+
+    
+    return results.map(({ name, url }) => {
+        const id = url.split('/').at(-2);
+
+        return {
+            params: { id: id },
+            props: { url: url, name: name }
+        }
+    })
+    
+}) satisfies GetStaticPaths;
+
+const { id } = Astro.params;
+const { name, url } = Astro.props;
+
+const audioSrc = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${id}.ogg`
+---
+
+<Layout title="Algun Pokémon">
+    <section class="mt-10 mx-10 flex flex-col justify-center items-center">
+
+        <div>
+            <a class="text-blue-500" href="/">Regresar</a>
+            <h1 class="text-3xl uppercase">{name}</h1>
+            <PokemonCard name={name} url={url} isBig />
+            <audio controls class="mt-5">
+                <source src={audioSrc} type="audio/ogg" />
+                <!-- mensaje en caso de que el navegador no soporte ese tag -->
+                Your browser does not support audio content.
+            </audio>
+        </div>
+
+    </section>
+</Layout>
+
+<!-- se pueden poner los estilos acá (scoped) o inline como siempre -->
+<style>
+    a {
+        @apply hover:underline 
+    }
+</style>

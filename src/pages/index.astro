@@ -1,11 +1,46 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import PokemonCard from '../components/pokemons/PokemonCard.astro';
+import type { PokemonListResponse } from '../interfaces/pokemon-list.response';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const title = "Pokémon static | Home";
+
+const resp = await fetch("https://pokeapi.co/api/v2/pokemon");
+const data = await resp.json() as PokemonListResponse;
+
+// console.log("data: ", data);
+
 ---
 
-<Layout>
-	<Welcome />
+<Layout title={title}>
+	<!--Página de Inicio de Bienvenida-->
+	<h1 class="text-6xl uppercase pt-20">Bienvenidos al Poké-Dex</h1>
+	<section aria-label="Página de Inicio del Pokédex">
+		<a class="text-blue-500 text-3xl" href="/pokemons/1">Ingresar</a>
+	</section>
+	<footer class="mt-120 underline">
+		Developed by Gonzalo La Ferrera ©2025
+	</footer>
+	<!-- Página de Inicio "Index" sin páginación -->
+	<!-- <h1 class="text-3xl">Listado de Pokémon's</h1>
+	<hr/> -->
+	<!-- <section aria-label="Listado de Pokémon's" class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-4">
+		{
+			data.results.map((pokemon) => (
+				<li>{pokemon.name}</li>
+			))
+		}
+	</section> -->
+	<!-- <section 
+		aria-label="Listado de Pokémon's" 
+		class="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-5 gap-4 mt-5"
+	>
+		{
+			data.results.map((pokemon) => (
+				// <li>{pokemon.name}</li>
+				<PokemonCard name={pokemon.name} url={pokemon.url} isBig={false}/>
+			))
+		}
+	</section> -->
+	
 </Layout>

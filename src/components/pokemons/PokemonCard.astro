@@ -1,0 +1,52 @@
+---
+
+interface Props {
+    name: string;
+    url: string;
+    isBig?: boolean;
+};
+
+const { name, url, isBig = false } = Astro.props;
+
+const pokemonId = url.split('/').at(-2);
+const pokemonImg = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonId}.png`
+
+---
+<!-- Esta condición de CSS refleja una creacion de clase false producto de la lógica booleana, y ocasionalmente podría llegar a traer problemas. Esto se puede reemplazar por un classList que no creará ese 'false' -->
+<!-- class=`rounded flex flex-col justify-center items-center p-2 ${ !isBig && 'border'}` -->
+
+<!-- Clase clonada previa al ID -->
+<!-- href={`/pokemons/${name}`}  -->
+
+<a 
+    href={`/pokemons/${name}`} 
+    class:list={[
+        `rounded flex flex-col justify-center items-center p-2`,
+        {
+            border: !isBig,
+        },
+    ]}
+>
+    <img
+        transition:name=`${name}-image`
+        src={pokemonImg} 
+        alt={name}
+        class:list={[
+            {
+                "h-64 w-64": isBig,
+                "h-26 w-26": !isBig,
+            },
+        ]}
+    >
+    <span 
+        class:list={[
+            `capitalize`,
+            {
+                "text-3xl text-blue-300": isBig,
+            }
+        ]}
+    >
+        #{pokemonId} - {name}
+    </span>
+    <!-- <span>{url}</span> -->
+</a >

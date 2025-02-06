@@ -1,7 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import PokemonCard from '../components/pokemons/PokemonCard.astro';
+// import PokemonCard from '../components/pokemons/PokemonCard.astro';
 import type { PokemonListResponse } from '../interfaces/pokemon-list.response';
+import Title from '@components/shared/Title.astro';
 
 const title = "Pokémon static | Home";
 
@@ -14,7 +15,11 @@ const data = await resp.json() as PokemonListResponse;
 
 <Layout title={title}>
 	<!--Página de Inicio de Bienvenida-->
-	<h1 class="text-6xl uppercase pt-20">Bienvenidos al Poké-Dex</h1>
+	
+	<!-- Posteriomente componentizado -->
+	<!-- <h1 class="text-6xl uppercase pt-20">Bienvenidos al Poké-Dex</h1> -->
+
+	<Title>Bienvenidos al Poké-Dex</Title>
 	<section aria-label="Página de Inicio del Pokédex">
 		<a class="text-blue-500 text-3xl" href="/pokemons/1">Ingresar</a>
 	</section>

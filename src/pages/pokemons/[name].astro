@@ -6,6 +6,8 @@ import type { PokemonListResponse } from "../../interfaces/pokemon-list.response
 import Layout from "../../layouts/Layout.astro";
 import PokemonCard from "../../components/pokemons/PokemonCard.astro";
 
+import { Icon } from 'astro-icon/components';
+
 // función getStaticPaths sirve para definir las rutas que van a funcionar. Si no estan definidas acá dan 404!
 export const getStaticPaths = (async() => {
     
@@ -48,8 +50,25 @@ const pokemonImg = `https://raw.githubusercontent.com/PokeAPI/sprites/master/spr
     <section class="mt-10 mx-10 flex flex-col justify-center items-center">
 
         <div>
-            <a class="text-blue-500" href="/pokemons/1">Regresar</a>
-            <h1 class="text-3xl uppercase">{name}</h1>
+            <!-- Botón posteriormente refactorizado -->
+            <!-- <a class="text-blue-500" href="/pokemons/1">Regresar</a> -->
+            <div class="flex flex-row">
+                <div>
+                    <button 
+                        class="text-blue-500 cursor-pointer"
+                        onclick="history.back()"
+                    >
+                        Regresar
+                    </button>
+                    <h1 class="text-3xl uppercase">{name}</h1>
+                </div>
+    
+                <button class="ml-28 hover:animate-pulse">
+                    <Icon class="hidden" name="heart-full" size={50}/>
+                    <Icon name="heart-outline" size={50}/>
+                </button>
+            </div>
+
             <PokemonCard name={name} url={url} isBig />
             <audio controls class="mt-5">
                 <source src={audioSrc} type="audio/ogg" />

@@ -1,0 +1,88 @@
+---
+
+// Cree una const con cada uno de los links para no repetir los <a>
+const links = [
+    { href: '/', text:'Home Page'},
+    { href: '/pokemons/1', text:'PokéDex'},
+    { href: '/favorites', text:'Favoritos'}
+];
+
+const currentPath = Astro.url.pathname;
+console.log(currentPath);
+
+---
+
+
+<nav class="shadow bg-slate-900">
+    <div class="container flex items-center justify-center p-6 mx-auto text-gray-600 capitalize">
+        <!-- Opción 1 para el NavBar animado sin JS-->
+        <!-- {
+            links.map(({href, text}) => (
+                <a 
+                    href={href} 
+                    // class="text-gray-300 border-b-2 border-blue-500 mx-1.5 sm:mx-6"
+                    class:list={[
+                        `text-gray-300 mx-1.5 sm:mx-6`,
+                        {
+                            "border-b-2 border-blue-500 text-2xl": href === currentPath,
+                            "border-none": href !== currentPath
+                        },
+                    ]}
+                >{text}</a>
+            ))
+        } -->
+        
+        <!-- Opción 2 para el NavBar animado sin JS-->
+        <!-- {
+            links.map(({href, text}) => (
+                <div>
+                    <a 
+                        href={href} 
+                        class="text-gray-300 mx-1.5 sm:mx-6"
+                        
+                    >{text}</a>
+                    {
+                        currentPath === href ? (
+                            <div 
+                                class="border-b-2 border-blue-500 mx-4" 
+                                transition:name="menu-line"
+                            />
+                        ) : (
+                        <div 
+                                class="border-b-2 border-transparent" 
+                            />
+                        )
+                    }
+                </div>
+            ))
+        } -->
+
+        <!-- Opción 3 para el Navbar animado sin JS-->
+        
+        {
+            links.map(({href, text}) => (
+                <div>
+                    <a 
+                        href={href} 
+                        class="text-gray-300 mx-1.5 sm:mx-6"
+                        
+                    >{text}</a>
+                    {
+                        currentPath === href && (
+                            <div 
+                                class="border-b-2 border-blue-500 mx-4" 
+                                transition:name="menu-line"
+                            />
+                        )
+                    }
+                </div>
+            ))
+        }
+
+        <!-- Para no escribirlos de forma manual, hacemos un .map() -->
+        <!-- <a href="#" class="border-b-2 border-transparent hover:text-gray-500 hover:border-blue-500 mx-1.5 sm:mx-6">features</a>
+
+        <a href="#" class="border-b-2 border-transparent hover:text-gray-500 hover:border-blue-500 mx-1.5 sm:mx-6">pricing</a> -->
+
+    </div>
+</nav>
